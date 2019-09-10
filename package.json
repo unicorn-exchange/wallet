@@ -2,16 +2,73 @@
   "name": "btc",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "src/index",
   "scripts": {
-    "build": "yarn typescript",
+    "build": "npm run typescript",
     "typescript": "tsc --build",
-    "test": "mocha --timeout 99999999 --exit -r ts-node/register src/tests/*.spec.ts"
+    "test": "mocha --timeout 99999999 --exit -r ts-node/register tests/*.spec.ts",
+    "lint": "eslint --ext .jsx,.js,.ts ./ --fix"
   },
   "author": "nikdementev",
   "license": "ISC",
+  "prettier": {
+    "singleQuote": false,
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "printWidth": 120,
+    "semi": true,
+    "bracketSpacing": false
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true,
+      "es6": true,
+      "jest": true
+    },
+    "rules": {
+      "no-console": "error",
+      "no-debugger": "error",
+      "no-unused-vars": "warn",
+      "no-var": "error",
+      "object-curly-spacing": "error",
+      "import/no-default-export": "error",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/explicit-member-accessibility": 0,
+      "@typescript-eslint/explicit-function-return-type": 0,
+      "@typescript-eslint/no-parameter-properties": 0,
+      "@typescript-eslint/interface-name-prefix": 0
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:prettier/recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings"
+    ],
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [
+            ".js",
+            ".jsx",
+            ".ts"
+          ]
+        }
+      }
+    },
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "legacyDecorators": true
+      }
+    }
+  },
   "dependencies": {
-    "@types/jest": "^24.0.15",
     "axios": "^0.19.0",
     "bignumber.js": "^9.0.0",
     "bip65": "^1.0.3",
@@ -22,11 +79,24 @@
     "wif": "^2.0.6"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.2",
+    "@types/hdkey": "^0.7.0",
+    "@types/jest": "^24.0.18",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.0.8",
+    "@types/sinon": "^7.0.13",
+    "@types/web3": "^1.0.19",
+    "@types/wif": "^2.0.1",
+    "@typescript-eslint/eslint-plugin": "^2.2.0",
+    "@typescript-eslint/parser": "^2.2.0",
     "bip39": "^3.0.2",
     "chai": "^4.2.0",
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
     "mocha": "^6.1.4",
+    "prettier": "^1.18.2",
     "sinon": "^7.3.2",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.2"
