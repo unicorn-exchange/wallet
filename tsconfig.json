@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "target": "es2017",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "composite": true,
+    "rootDir": "src",
+    "outDir": "lib",
+    "lib": [ "es6", "dom" ],
+    "types": [ "node", "mocha" ]
+  },
+  "extends": "./tsconfig.paths.json",
+  "exclude": [
+    "node_modules",
+    "src/tests/**/*"
+  ],
+  "include": [
+    "src/**/*"
+  ]
+}
