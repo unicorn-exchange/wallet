@@ -1,2 +1,2 @@
-export * from './BtcWallet'
-export * from './EthWallet'
+export * from './Wallet'
+
