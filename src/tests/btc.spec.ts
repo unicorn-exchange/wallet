@@ -14,43 +14,43 @@ const scriptData = {
 
 let btc
 
-describe('Btc send tx integration', () => {
-  beforeEach(() => {
-    btc = new BtcWallet({ networks: 'test' })
-  })
+// describe('Btc send tx integration', () => {
+//   beforeEach(() => {
+//     btc = new BtcWallet({ network: 'test' })
+//   })
+//
+//   it('Create raw send transaction', async () => {
+//     await btc.createAccountWithPrivateKey('cPKNvsetQKj1ckMWrDxt7hS4cmN8wFaT8oZpv4kWoPxc5dBEUe6e')
+//     // Act
+//     const txRaw = await btc.getSendRawTransaction('mh4dYneN5HGUYNGQpHopJweL7GY1RgxWTA', '0.0001')
+//
+//     const result = await btc.broadcastTx(txRaw.toHex())
+//     console.log('result', result)
+//     // Assert
+//     expect(txRaw).to.have.all.keys('ins', 'outs', 'locktime', 'version')
+//   })
+//
+// })
 
-  it('Create raw send transaction', async () => {
-    await btc.createAccountWithPrivateKey('cPKNvsetQKj1ckMWrDxt7hS4cmN8wFaT8oZpv4kWoPxc5dBEUe6e')
-    // Act
-    const txRaw = await btc.getSendRawTransaction('mh4dYneN5HGUYNGQpHopJweL7GY1RgxWTA', '0.0001')
-
-    const result = await btc.broadcastTx(txRaw.toHex())
-    console.log('result', result)
-    // Assert
-    expect(txRaw).to.have.all.keys('ins', 'outs', 'locktime', 'version')
-  })
-
-})
-
-describe('Btc send tx integration', () => {
-  beforeEach(() => {
-    btc = new BtcWallet({ networks: 'test' })
-  })
-  it('Create raw send transaction', async () => {
-    const account = await btc.createAccountWithPrivateKey('cPKNvsetQKj1ckMWrDxt7hS4cmN8wFaT8oZpv4kWoPxc5dBEUe6e')
-    // Act
-    const txHex = await btc.newSendRawTransaction('mh4dYneN5HGUYNGQpHopJweL7GY1RgxWTA', '0.0001')
-
-    const result = await btc.broadcastTx(txHex)
-    console.log('result', result)
-    // Assert
-    expect(txHex).to.be.equal('string')
-  })
-})
+// describe('Btc send tx integration', () => {
+//   beforeEach(() => {
+//     btc = new BtcWallet({ network: 'test' })
+//   })
+//   it('Create raw send transaction', async () => {
+//     const account = await btc.createAccountWithPrivateKey('cPKNvsetQKj1ckMWrDxt7hS4cmN8wFaT8oZpv4kWoPxc5dBEUe6e')
+//     // Act
+//     const txHex = await btc.newSendRawTransaction('mh4dYneN5HGUYNGQpHopJweL7GY1RgxWTA', '0.0001')
+//
+//     const result = await btc.broadcastTx(txHex)
+//     console.log('result', result)
+//     // Assert
+//     expect(txHex).to.be.equal('string')
+//   })
+// })
 
 describe('Create BTC account', () => {
   beforeEach(() => {
-    btc = new BtcWallet({ networks: 'test' })
+    btc = new BtcWallet({ network: 'testnet' })
 
     sinon.stub(btc, 'fetchUnspent').returns([{ value: 2110000, vOut: 0, txId: 'dc497dd5c7fa3127663e647cf0d77f69ae139f3567c2f8addcf086eed6c7e45c' }])
   })
@@ -122,7 +122,7 @@ describe('Create BTC account', () => {
 
 describe('Create Transaction', () => {
   beforeEach(() => {
-    btc = new BtcWallet({ networks: 'test' })
+    btc = new BtcWallet({ network: 'testnet' })
     btc.createRandomAccount()
     sinon.stub(btc, 'fetchUnspent').returns([{ value: 2110000, txId: 'dc497dd5c7fa3127663e647cf0d77f69ae139f3567c2f8addcf086eed6c7e45c', vOut: 0 }])
   })
@@ -213,7 +213,7 @@ describe('Create Transaction', () => {
 
 describe('Create and check HTLC script', () => {
   beforeEach(() => {
-    btc = new BtcWallet({ networks: 'test' })
+    btc = new BtcWallet({ network: 'testnet' })
 
     sinon.stub(btc, 'fetchUnspent').returns([{ value: 2110000, vOut: 0, txId: 'dc497dd5c7fa3127663e647cf0d77f69ae139f3567c2f8addcf086eed6c7e45c' }])
   })
@@ -295,7 +295,7 @@ describe('Create and check HTLC script', () => {
 
 describe('Create Transaction', () => {
   beforeEach(() => {
-    btc = new BtcWallet({ networks: 'test' })
+    btc = new BtcWallet({ network: 'testnet' })
     sinon.stub(btc, 'fetchUnspent').returns([{
       value: 2110000,
       vOut: 0,

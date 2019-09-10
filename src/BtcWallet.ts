@@ -26,9 +26,11 @@ import {
 
 export class BtcWallet implements IBtcWallet {
   private account: any
+  private options: any
   private readonly network: Network
 
   constructor(options) {
+    this.options = options
     this.network = options.network === 'testnet'
       ? networks.testnet
       : networks.bitcoin
@@ -394,7 +396,11 @@ export class BtcWallet implements IBtcWallet {
   }
 
   async fetchUnspent(address: string): Promise<Array<OutPut>> {
-    const { data } = await axios.get(`https://test-insight.bitpay.com/api/addr/${address}/utxo`)
+    const url = this.options.network === 'testnet'
+      ? `https://test-insight.bitpay.com/api/addr/${address}/utxo`
+      : `https://insight.bitpay.com/api/addr/${address}/utxo`
+
+    const { data } = await axios.get(url)
 
     if (!data) {
       console.error(`You don\'t  have unspent tx: ${data}`)
@@ -409,8 +415,12 @@ export class BtcWallet implements IBtcWallet {
   }
 
   async broadcastTx(txRaw: string): Promise<any> {
+    const url = this.options.network === 'testnet'
+      ? 'https://test-insight.bitpay.com/api/tx/send'
+      : 'https://insight.bitpay.com/api/tx/send'
+
     try {
-      return await axios.post(`https://test-insight.bitpay.com/api/tx/send`, {
+      return await axios.post(url, {
         rawtx: txRaw,
       })
     } catch (err) {
