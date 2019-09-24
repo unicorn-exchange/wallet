@@ -1,17 +1,15 @@
-import {BtcWallet} from "./BtcWallet";
-import {EthWallet} from "./EthWallet";
-import {GenerateMnemonic, IBtcWallet, IEth} from "./interfaces";
-
-import {log} from "./utils";
+import {BtcWallet} from "./wallets/BtcWallet";
+import {EthWallet} from "./wallets/EthWallet";
+import {GenerateMnemonic, IBtcWallet, IEth} from "./wallets/interfaces";
 
 import {generateMnemonic, validateMnemonic} from "bip39";
 
 type wallets = IBtcWallet | IEth;
 
 export class Wallet {
-  public wallets: Map<string, wallets> = new Map();
+  wallets: Map<string, wallets> = new Map();
 
-  constructor({network}) {
+  constructor({network}: {network: string}) {
     this.wallets.set("BTC", new BtcWallet({network}));
     this.wallets.set("ETH", new EthWallet({network}));
   }
@@ -45,15 +43,11 @@ export class Wallet {
 
   async getBalance(type: string, address: string): Promise<number | string> {
     const customWallet = this.getWallet(type);
-
-    const balance = await customWallet.getBalance(address);
-    log(`Balance ${type}`, type, balance);
-
-    return balance;
+    return await customWallet!.getBalance(address);
   }
 
   async sendCurrency(type: string, to: string, amount: string) {
     const customWallet = this.getWallet(type);
-    return await customWallet.send(to, amount);
+    return await customWallet!.send(to, amount);
   }
 }

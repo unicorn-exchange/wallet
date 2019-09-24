@@ -1,5 +1,6 @@
+// @ts-nocheck
 import {ECPair, ECPairInterface, networks, opcodes, payments, Psbt, script, TransactionBuilder} from "bitcoinjs-lib";
-
+// @ts-ignore
 import bip65 from "bip65";
 import {generateMnemonic, validateMnemonic} from "bip39";
 
@@ -23,13 +24,14 @@ import {
   Transaction,
   TxValues,
 } from "./interfaces";
+import {log} from "./utils";
 
 export class BtcWallet implements IBtcWallet {
   private account: any;
   private options: any;
   private readonly network: Network;
 
-  constructor(options) {
+  constructor(options: {network: string}) {
     this.options = options;
     this.network = options.network === "testnet" ? networks.testnet : networks.bitcoin;
   }
@@ -86,7 +88,7 @@ export class BtcWallet implements IBtcWallet {
 
   getAddressFromPubKey(publicKey: Buffer): string {
     const {address} = payments.p2pkh({pubkey: publicKey, network: this.network});
-    return address;
+    return address!;
   }
 
   createKeyPairFromMnemonic(accountData: CreateFromMnemonicData): Account {
@@ -102,6 +104,7 @@ export class BtcWallet implements IBtcWallet {
 
     const master = hdkey.fromMasterSeed(Buffer.from(mnemonicSeed, "hex"));
     const node = master.derive(`m/44'/0'/0'/0/${indexForCreate || 0}`);
+    // @ts-ignore
     const privateKey = wif.encode(this.network.wif, node._privateKey, false);
 
     return this.createAccountWithPrivateKey(privateKey);
@@ -164,7 +167,7 @@ export class BtcWallet implements IBtcWallet {
     tx.addOutput(to, fundValue);
     tx.addOutput(address, skipValue);
 
-    unspentList.forEach((input, index) => {
+    unspentList.forEach((input: any, index: number) => {
       tx.sign(index, keyPair);
     });
 
@@ -175,11 +178,9 @@ export class BtcWallet implements IBtcWallet {
     try {
       const txRaw = await this.getSendRawTransaction(to, amount);
       const result = await this.broadcastTx(txRaw.toHex());
-      console.log("result", result);
-
       return result;
     } catch (e) {
-      console.log("Error", e);
+      log(e);
     }
   }
 
@@ -228,7 +229,7 @@ export class BtcWallet implements IBtcWallet {
     return txRaw.toHex();
   }
 
-  createOtcScript(secretHash) {
+  createOtcScript(secretHash: string) {
     script.compile([opcodes.OP_RIMPED160, Buffer.from(secretHash, "hex"), opcodes.OP_EQUALVERIFY]);
   }
 
@@ -268,7 +269,7 @@ export class BtcWallet implements IBtcWallet {
     });
 
     return {
-      scriptAddress,
+      scriptAddress: scriptAddress!,
       HTLCScript,
     };
   }
@@ -307,6 +308,7 @@ export class BtcWallet implements IBtcWallet {
     if (expected.recipientPublicKey !== recipientPublicKey) {
       return `Expected script recipient publicKey: ${expected.recipientPublicKey}, got: ${recipientPublicKey}`;
     }
+    return expected.value.toString();
   }
 
   async fundScript(data: ScriptData, amount: string): Promise<string> {
@@ -361,8 +363,9 @@ export class BtcWallet implements IBtcWallet {
       throw new Error(`Address is undefined: ${address}`);
     }
 
+    // @ts-ignore
     if (!unspentList && unspentList.length === 0) {
-      console.error("getBalanceAddress: unspentList is empty");
+      log("getBalanceAddress: unspentList is empty");
       return "0";
     }
 
@@ -379,8 +382,9 @@ export class BtcWallet implements IBtcWallet {
         return 0;
       }
     } catch (error) {
-      console.error("Error", error);
+      log("Error", error);
     }
+    return 0;
   }
 
   async getBalanceScript(data: ScriptData): Promise<string> {
@@ -398,11 +402,10 @@ export class BtcWallet implements IBtcWallet {
     const {data} = await axios.get(url);
 
     if (!data) {
-      console.error(`You don't  have unspent tx: ${data}`);
-      return;
+      throw new Error(`You don't  have unspent tx: ${data}`);
     }
 
-    return data.map(({satoshis, txid, vout}) => ({value: satoshis, txId: txid, vOut: vout}));
+    return data.map(({satoshis, txid, vout}: any) => ({value: satoshis, txId: txid, vOut: vout}));
   }
 
   valueToSatoshi(value: string | number) {

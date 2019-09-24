@@ -20,6 +20,7 @@ export const log = (...props: any) => {
   //   return console.log('👉', `[${moment().format('hh:mm:ss')}]`, JSON.parse(JSON.stringify(props)))
   // }
 
+  // TODO: Replace logger
   return console.log("👉", `[${Date.now()}]`, ...props);
 };
 

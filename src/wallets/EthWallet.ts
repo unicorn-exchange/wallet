@@ -1,6 +1,6 @@
 import {initProvider, log} from "./utils";
 import {AccountEth, CreateFromMnemonicData, EthParams, IEth, ParamsTx} from "./interfaces";
-
+// @ts-ignore
 import hdkey from "ethereumjs-wallet/hdkey";
 
 export class EthWallet implements IEth {
@@ -20,11 +20,9 @@ export class EthWallet implements IEth {
     };
   }
 
-  async fetchBalance(address): Promise<number> {
-    return await this.web3.eth.getBalance(address).then(wei => {
+  async fetchBalance(address: string): Promise<number> {
+    return await this.web3.eth.getBalance(address).then((wei: any) => {
       const balance = Number(this.web3.utils.fromWei(wei));
-      console.log("ETH balance:", balance);
-
       return balance;
     });
   }
@@ -83,13 +81,13 @@ export class EthWallet implements IEth {
 
   async broadCastTx(rawTx: string): Promise<any> {
     log("rawTx", rawTx);
-    return await this.web3.eth
+    return this.web3.eth
       .sendSignedTransaction(rawTx)
-      .on("transactionHash", hash => {
+      .on("transactionHash", (hash: string) => {
         log("Hash tx:", hash);
       })
-      .on("error", error => {
-        log("ETH sendTx Error:", error);
+      .on("error", (err: Error) => {
+        log("ETH sendTx Error:", err);
       });
   }
 

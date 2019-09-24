@@ -22,7 +22,7 @@ export interface ScriptData {
   ownerPublicKey: string;
   recipientPublicKey: string;
   lockTime: number;
-  secret?: string;
+  secret: string;
 }
 
 export interface ScriptValues {
@@ -62,7 +62,7 @@ export interface IBtcWallet {
 
   createRandomAccount(): Account;
 
-  getAccount();
+  getAccount(): any;
 
   getBalance(address: string): Promise<number | string>;
 
@@ -104,5 +104,5 @@ export interface IBtcWallet {
 
   fetchUnspent(address: string): Promise<Array<OutPut>>;
 
-  broadcastTx(txHex: string): Promise<Response>;
+  broadcastTx(txHex: string): Promise<Response>; // TODO
 }
