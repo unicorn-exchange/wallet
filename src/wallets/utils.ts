@@ -21,8 +21,6 @@ export const log = (...props: any) => {
   // }
 
   // TODO: Replace logger
+  // eslint-disable-next-line no-console
   return console.log("👉", `[${Date.now()}]`, ...props);
 };
-
-export const logGroup = (...props: any) => LOG_EVENTS && console.group("🔥", ...props);
-export const closeGroup = () => console.groupEnd();

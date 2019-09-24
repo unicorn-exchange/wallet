@@ -422,6 +422,7 @@ export class BtcWallet implements IBtcWallet {
       return await axios.post(url, {
         rawtx: txRaw,
       });
+      // eslint-disable-next-line no-empty
     } catch (err) {
     }
   }
